@@ -24,6 +24,12 @@ See [himynameisjonas/jekyll-heroku-unicorn](https://github.com/himynameisjonas/j
 to learn how to host a jekyll site on Heroku without need of building the site before deploy.
 
 ## Usage
+
+**NOTE: Everything below is from the original documentation. I have written some more specific documentation [on our wiki](http://wiki.ibrow.me/wiki/jekyll-deploy.html) to handle this stuff**
+
+
+
+
 1. **Create new account**
 
   It would be best if you create a new heroku account for HerokuDeployer. 
