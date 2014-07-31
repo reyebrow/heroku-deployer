@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'json'
+require 'magnum/payload'
 require_relative 'heroku_deployer'
 require_relative 'deploy_job'
 
@@ -15,15 +16,19 @@ class Web < Sinatra::Application
   end
 
   get '/' do
-    "Hello World!"
+    "Nothing to see here!"
   end
 
-  post '/deploy/:app_name/:secret' do |app_name, secret|
+  post '/deploy/:provider/:app_name/:secret' do |provider, app_name, secret|
+
+    payload = Magnum::Payload.parse(provider, params["payload"])
+
     if ENV["#{app_name}_BRANCH"]
-      payload = JSON.parse(params["payload"])
-      branch = payload["ref"].split("/").last
-      return unless ENV["#{app_name}_BRANCH"] == branch
+      return unless ENV["#{app_name}_BRANCH"] == payload.branch
+    elsif ENV["DEFAULT_BRANCH"]
+      return unless ENV["DEFAULT_BRANCH"] == payload.branch
     end
+
     if secret == ENV['DEPLOY_SECRET']
       logger.info "correct secret"
       if HerokuDeployer.exists?(app_name)
